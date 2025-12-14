@@ -1,0 +1,4 @@
+/* Replaced Tailwind import with a project stylesheet.
+   This file imports `styles.css` which provides minimal utility
+   classes that were previously supplied by Tailwind. */
+@import './styles.css';
