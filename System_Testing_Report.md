@@ -158,3 +158,13 @@ Two distinct bugs were identified during development. Below is the record of the
 | **Root Cause** | **Incorrect Data Source**: The filter dropdown was populated using a distinct query of the `roles` column from the `users` table (`User::distinct()->pluck('roles')`), effectively showing only "active" roles instead of all available groups. |
 | **The Fix** | Updated the `users.index` view to iterate over the `$groups` collection (fetched from the `groups` table) instead of the `$roles` array. This ensures the filter dropdown always lists all defined user groups, regardless of whether users are assigned to them. |
 | **Status** | **Resolved** |
+
+### Bug Record #6
+| Field | Details |
+| :--- | :--- |
+| **Bug ID** | BUG-006 |
+| **Module** | User Management |
+| **The Issue** | Editing a user resulted in a fatal SQL Error (`Column not found: Unknown column 'name:"Staff"'`). |
+| **Root Cause** | **Object-to-String Conversion Error**: The validation rule used `$this->route('user')` directly, which returns a User object model. When concatenated into the validation string, it was converted to its JSON representation (e.g., `{"id":1, "name":"Staff"...}`), causing the SQL query parser to interpret JSON keys as column names. |
+| **The Fix** | Updated `UpdateUserRequest.php` to explicitly access the ID property: `$this->route('user')->user_id`. This passes the integer ID (e.g., `1`) to the validation rule instead of the JSON string. |
+| **Status** | **Resolved** |
