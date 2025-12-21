@@ -46,7 +46,7 @@ class ProductController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'product_name' => ['required', 'string', 'max:255'],
+            'product_name' => ['required', 'string', 'max:255', 'unique:products,product_name'],
             'description' => ['nullable', 'string'],
             'category_id' => ['required', 'exists:categories,category_id'],
             'unit_price' => ['required', 'numeric', 'min:0'],
@@ -78,7 +78,7 @@ class ProductController extends Controller
     public function update(Request $request, Product $product): RedirectResponse
     {
         $request->validate([
-            'product_name' => ['required', 'string', 'max:255'],
+            'product_name' => ['required', 'string', 'max:255', 'unique:products,product_name,' . $product->product_id . ',product_id'],
             'description' => ['nullable', 'string'],
             'category_id' => ['required', 'exists:categories,category_id'],
             'unit_price' => ['required', 'numeric', 'min:0'],

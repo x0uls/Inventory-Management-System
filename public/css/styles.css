@@ -1253,3 +1253,60 @@ h6 {
     justify-content: space-between;
     align-items: center;
 }
+
+/* ===================================
+   Pagination (Bootstrap 5 Customization)
+   =================================== */
+.pagination {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 1rem 0;
+    gap: 0.25rem;
+}
+
+.page-item .page-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+    padding: 0 0.5rem;
+    color: var(--color-slate-600);
+    background-color: white;
+    border: 1px solid var(--color-slate-200);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: all var(--transition-fast);
+}
+
+.page-item.active .page-link {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+    font-weight: 600;
+}
+
+.page-item.disabled .page-link {
+    color: var(--color-slate-300);
+    background-color: var(--color-slate-50);
+    border-color: var(--color-slate-100);
+    cursor: not-allowed;
+}
+
+.page-item:not(.active):not(.disabled) .page-link:hover {
+    background-color: var(--color-slate-50);
+    border-color: var(--color-slate-300);
+    color: var(--color-primary);
+}
+
+.page-item:first-child .page-link {
+    border-top-left-radius: var(--radius-md);
+    border-bottom-left-radius: var(--radius-md);
+}
+
+.page-item:last-child .page-link {
+    border-top-right-radius: var(--radius-md);
+    border-bottom-right-radius: var(--radius-md);
+}

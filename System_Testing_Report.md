@@ -135,7 +135,17 @@ Two distinct bugs were identified during development. Below is the record of the
 | :--- | :--- |
 | **Bug ID** | BUG-003 |
 | **Module** | General UI / Pagination |
-| **The Issue** | Pagination links on list pages (Products, Sales, Stock) appeared broken, displaying oversized SVG arrows and misaligned text instead of standard navigation links. |
-| **Root Cause** | **Missing CSS Framework**: Laravel's pagination views default to Tailwind CSS. Since the project uses custom CSS without Tailwind, the SVG icons were rendered at full unstyled opacity and size. |
-| **The Fix** | Configured the application to use Bootstrap 5 pagination views in `AppServiceProvider`. This renders standard HTML navigation links that display correctly even without Tailwind. |
+| **The Issue** | Pagination links on list pages (Products, Sales, Stock) initially appeared broken (oversized SVGs). After enabling Bootstrap pagination, the layout was functional but lacked styling, appearing as a plain list that broke the application theme. |
+| **Root Cause** | **Missing CSS Integration**: Enabling Bootstrap pagination views fixed the HTML structure (`.page-item`, `.page-link`), but the application's custom CSS file (`styles.css`) lacked the corresponding classes to style these Bootstrap elements, resulting in a raw, unstyled look. |
+| **The Fix** | Added custom CSS rules in `styles.css` targeting `.pagination`, `.page-item`, and `.page-link`. These styles applied the application's color tokens (`--color-primary`) and border radii, ensuring the pagination matches the overall design language. |
+| **Status** | **Resolved** |
+
+### Bug Record #4
+| Field | Details |
+| :--- | :--- |
+| **Bug ID** | BUG-004 |
+| **Module** | Products & Categories |
+| **The Issue** | Users were able to create multiple products or categories with the exact same name (e.g., creating "Electronics" category twice), leading to data ambiguity and confusion in dropdown selections. |
+| **Root Cause** | **Missing Validation Constraints**: The backend validation logic only checked for required fields and data types but missed the `unique` constraint check against the database table. |
+| **The Fix** | Updated `ProductController`, `StoreCategoryRequest`, and `UpdateCategoryRequest` to include the `unique` validation rule (e.g., `unique:products,product_name`). Also handled the edge case for updates by forcing the validation to ignore the current item's ID upon editing. |
 | **Status** | **Resolved** |
