@@ -149,3 +149,12 @@ Two distinct bugs were identified during development. Below is the record of the
 | **Root Cause** | **Missing Validation Constraints**: The backend validation logic only checked for required fields and data types but missed the `unique` constraint check against the database table. |
 | **The Fix** | Updated `ProductController`, `StoreCategoryRequest`, and `UpdateCategoryRequest` to include the `unique` validation rule (e.g., `unique:products,product_name`). Also handled the edge case for updates by forcing the validation to ignore the current item's ID upon editing. |
 | **Status** | **Resolved** |
+### Bug Record #5
+| Field | Details |
+| :--- | :--- |
+| **Bug ID** | BUG-005 |
+| **Module** | User Management |
+| **The Issue** | The "User Groups" filter on the User Management page did not include newly created groups if no users were currently assigned to them. Users could only filter by roles that were already "in use". |
+| **Root Cause** | **Incorrect Data Source**: The filter dropdown was populated using a distinct query of the `roles` column from the `users` table (`User::distinct()->pluck('roles')`), effectively showing only "active" roles instead of all available groups. |
+| **The Fix** | Updated the `users.index` view to iterate over the `$groups` collection (fetched from the `groups` table) instead of the `$roles` array. This ensures the filter dropdown always lists all defined user groups, regardless of whether users are assigned to them. |
+| **Status** | **Resolved** |

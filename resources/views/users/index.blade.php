@@ -15,8 +15,8 @@
             <div style="width: 200px;">
                 <select name="role" class="form-select">
                     <option value="all" {{ $currentRole === 'all' ? 'selected' : '' }}>All User Groups</option>
-                    @foreach($roles as $role)
-                        <option value="{{ $role }}" {{ $currentRole === $role ? 'selected' : '' }}>{{ ucfirst($role) }}</option>
+                    @foreach($groups as $group)
+                        <option value="{{ $group->group_name }}" {{ $currentRole === $group->group_name ? 'selected' : '' }}>{{ ucfirst($group->group_name) }}</option>
                     @endforeach
                 </select>
             </div>
