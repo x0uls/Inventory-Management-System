@@ -3,16 +3,9 @@
 @section('title', 'Add Stock')
 
 @section('content')
-<x-page-header title="Add Stock" description="Add new stock to inventory" />
+<x-page-header title="Add Stock" description="Add new stock to inventory" :center="true" />
 
-<div class="mb-6">
-    <a href="{{ route('stock.index') }}" class="btn btn-secondary">
-        <svg style="width: 20px; height: 20px; margin-right: 0.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-        </svg>
-        Back to Stock
-    </a>
-</div>
+
 
 <div class="card" style="max-width: 800px; margin: 0 auto;">
     <div class="card-body">
@@ -34,6 +27,7 @@
                         <button type="button" id="stop-scanner-btn" onclick="stopScanner()" class="btn btn-danger" style="display: none;">
                             Stop Scanner
                         </button>
+                        <a href="{{ route('stock.index') }}" class="btn btn-secondary">Cancel</a>
                     </div>
                 </div>
                 
@@ -78,6 +72,7 @@
                 <div class="flex gap-4" style="display: flex; gap: 1rem; margin-top: 2rem;">
                     <button type="button" onclick="showStep1()" class="btn btn-secondary">Back to Scan</button>
                     <button type="submit" class="btn btn-success" style="flex: 1;">Confirm & Add Stock</button>
+                    <a href="{{ route('stock.index') }}" class="btn btn-secondary">Cancel</a>
                 </div>
             </div>
         </form>

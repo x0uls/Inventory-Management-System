@@ -44,7 +44,7 @@ Route::middleware('auth')->group(function () {
 
     // Stock Management Pages
     Route::get('/stock/create', [StockController::class, 'create'])->name('stock.create');
-    Route::get('/stock/generate-barcode', [StockController::class, 'generateBarcode'])->name('stock.generate-barcode');
+    Route::get('/stock/generate-qrcode', [StockController::class, 'generateBarcode'])->name('stock.generate-qrcode');
     Route::get('/stock/{id}/batches/view', [StockController::class, 'viewBatches'])->name('stock.batches.view');
     Route::get('/stock/batch/{id}/edit', [StockController::class, 'editBatch'])->name('stock.batch.edit');
     Route::get('/stock/batch/{id}/barcode', [StockController::class, 'viewBarcode'])->name('stock.batch.barcode');

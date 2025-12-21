@@ -3,7 +3,7 @@
 @section('title', 'Add Group')
 
 @section('content')
-<x-page-header title="Add New Group" description="Create a new user group" />
+<x-page-header title="Add New Group" description="Create a new user group" :center="true" />
 
 <div class="card" style="max-width: 600px; margin: 0 auto;">
     <div class="card-body">

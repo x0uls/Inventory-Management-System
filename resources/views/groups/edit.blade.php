@@ -3,7 +3,7 @@
 @section('title', 'Edit User Group')
 
 @section('content')
-<x-page-header title="Edit User Group" description="Update user group information" />
+<x-page-header title="Edit User Group" description="Update user group information" :center="true" />
 
 <div class="card" style="max-width: 600px; margin: 0 auto;">
     <div class="card-body">

@@ -3,7 +3,7 @@
 @section('title', 'Add Category')
 
 @section('content')
-<x-page-header title="Add New Category" description="Create a new product category" />
+<x-page-header title="Add New Category" description="Create a new product category" :center="true" />
 
 <div class="card" style="max-width: 600px; margin: 0 auto;">
     <div class="card-body">

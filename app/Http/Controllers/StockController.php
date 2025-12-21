@@ -7,7 +7,6 @@ use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class StockController extends Controller
@@ -29,6 +28,7 @@ class StockController extends Controller
         if ($request->filled('filter') && $request->filter === 'low_stock') {
             $products = $query->get()->filter(function ($product) {
                 $totalQuantity = $product->batches_sum_quantity ?? 0;
+
                 return $totalQuantity <= $product->lowstock_alert;
             });
         } else {
@@ -72,7 +72,7 @@ class StockController extends Controller
 
         // Auto-generate batch number if not provided
         if (empty($batchNumber)) {
-            $batchNumber = 'BATCH-' . time() . '-' . rand(1000, 9999);
+            $batchNumber = 'BATCH-'.time().'-'.rand(1000, 9999);
         } else {
             // Check if provided batch_number already exists
             $existingBatch = Batch::where('batch_number', $batchNumber)->first();
@@ -81,27 +81,27 @@ class StockController extends Controller
                 $existingBatch->save();
 
                 return redirect()->route('stock.index')
-                    ->with('success', 'Stock quantity updated for existing batch: ' . $batchNumber);
+                    ->with('success', 'Stock quantity updated for existing batch: '.$batchNumber);
             }
         }
 
         // Generate QR Code Image (SVG)
         $options = new \chillerlan\QRCode\QROptions([
-            'version'    => 5,
+            'version' => 5,
             'outputType' => \chillerlan\QRCode\QRCode::OUTPUT_MARKUP_SVG,
-            'eccLevel'   => \chillerlan\QRCode\QRCode::ECC_L,
+            'eccLevel' => \chillerlan\QRCode\QRCode::ECC_L,
             'imageBase64' => false,
         ]);
-        
+
         $qrcode = new \chillerlan\QRCode\QRCode($options);
         $barcodeData = $qrcode->render($batchNumber);
-        $barcodePath = 'barcodes/' . $batchNumber . '.svg';
-        
+        $barcodePath = 'barcodes/'.$batchNumber.'.svg';
+
         // Ensure directory exists
-        if (!file_exists(public_path('barcodes'))) {
+        if (! file_exists(public_path('barcodes'))) {
             mkdir(public_path('barcodes'), 0755, true);
         }
-        
+
         file_put_contents(public_path($barcodePath), $barcodeData);
 
         Batch::create([
@@ -154,12 +154,15 @@ class StockController extends Controller
         $batches = Batch::where('product_id', $productId)
             ->orderBy('created_at', 'desc')
             ->get();
-            
+
         return response()->json(['batches' => $batches]);
     }
 
     public function updateBatch(Request $request, $id)
     {
+        // Debugging ping
+        // \Illuminate\Support\Facades\Log::info("UpdateBatch hit for ID: $id");
+
         $request->validate([
             'quantity' => ['required', 'integer', 'min:0'],
             'expiry_date' => ['nullable', 'date'],
@@ -168,7 +171,7 @@ class StockController extends Controller
         $batch = Batch::findOrFail($id);
         $batch->quantity = $request->quantity;
         $batch->expiry_date = $request->expiry_date;
-        
+
         // If quantity becomes 0, handle QR code cleanup
         if ($batch->quantity == 0) {
             if ($batch->qr_code_path && file_exists(public_path($batch->qr_code_path))) {
@@ -189,27 +192,49 @@ class StockController extends Controller
 
     public function generateBarcode()
     {
-        return view('stock.generate-barcode', [
-            'categories' => Category::orderBy('category_name')->get()
+        return view('stock.generate-qrcode', [
+            'categories' => Category::orderBy('category_name')->get(),
         ]);
     }
 
-    public function viewBatches($id)
+    public function viewBatches(Request $request, $id)
     {
         $product = Product::findOrFail($id);
-        $batches = Batch::where('product_id', $id)->orderBy('created_at', 'desc')->get();
+
+        $query = Batch::where('product_id', $id);
+
+        // Search
+        if ($request->filled('search')) {
+            $query->where('batch_number', 'like', '%'.$request->search.'%');
+        }
+
+        // Sort
+        $sort = $request->get('sort', 'created_at');
+        $direction = $request->get('direction', 'desc');
+
+        // Allowable sort columns
+        if (in_array($sort, ['batch_number', 'quantity', 'expiry_date', 'created_at'])) {
+            $query->orderBy($sort, $direction);
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+
+        $batches = $query->get();
+
         return view('stock.batches', compact('product', 'batches'));
     }
 
     public function editBatch($id)
     {
         $batch = Batch::with('product')->findOrFail($id);
+
         return view('stock.edit-batch', compact('batch'));
     }
 
     public function viewBarcode($id)
     {
         $batch = Batch::findOrFail($id);
+
         return view('stock.barcode-view', compact('batch'));
     }
 

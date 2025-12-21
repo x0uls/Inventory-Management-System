@@ -3,7 +3,7 @@
 @section('title', 'Add User')
 
 @section('content')
-<x-page-header title="Add New User" description="Create a new user account" />
+<x-page-header title="Add New User" description="Create a new user account" :center="true" />
 
 <div class="card" style="max-width: 600px; margin: 0 auto;">
     <div class="card-body">

@@ -22,6 +22,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        \Illuminate\Pagination\Paginator::useBootstrapFive();
+
         // Share low stock count with all views (cached for 2 minutes)
         View::composer('*', function ($view) {
             try {

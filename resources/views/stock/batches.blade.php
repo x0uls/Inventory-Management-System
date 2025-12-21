@@ -16,6 +16,30 @@
 
 <div class="card">
     <div class="card-body">
+        
+        <!-- Search and Filter -->
+        <div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+            <form method="GET" action="{{ route('stock.batches.view', $product->product_id) }}" style="display: flex; gap: 0.5rem; flex: 1; max-width: 400px;">
+                <input type="text" name="search" class="form-input" placeholder="Search Batch Number..." value="{{ request('search') }}">
+                <button type="submit" class="btn btn-primary">Search</button>
+                @if(request('search'))
+                    <a href="{{ route('stock.batches.view', $product->product_id) }}" class="btn btn-secondary">Clear</a>
+                @endif
+            </form>
+            
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                <span style="font-size: 0.875rem; color: var(--color-slate-500);">Sort by:</span>
+                <div class="dropdown" style="position: relative; display: inline-block;">
+                    <a href="{{ route('stock.batches.view', ['id' => $product->product_id, 'sort' => 'quantity', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc', 'search' => request('search')]) }}" class="btn btn-sm btn-secondary">
+                        Quantity @if(request('sort') == 'quantity') {{ request('direction') == 'asc' ? '↑' : '↓' }} @endif
+                    </a>
+                    <a href="{{ route('stock.batches.view', ['id' => $product->product_id, 'sort' => 'expiry_date', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc', 'search' => request('search')]) }}" class="btn btn-sm btn-secondary">
+                        Expiry @if(request('sort') == 'expiry_date') {{ request('direction') == 'asc' ? '↑' : '↓' }} @endif
+                    </a>
+                </div>
+            </div>
+        </div>
+
         <div class="table-container">
             <table class="table">
                 <thead>
@@ -32,7 +56,7 @@
                         <tr>
                             <td>{{ $batch->batch_number }}</td>
                             <td>{{ $batch->quantity }}</td>
-                            <td>{{ $batch->expiry_date ? \Carbon\Carbon::parse($batch->expiry_date)->format('Y-m-d') : '-' }}</td>
+                            <td>{{ $batch->expiry_date ? \Carbon\Carbon::parse($batch->expiry_date)->format('d-m-Y') : '-' }}</td>
                             <td>
                                 @if($batch->qr_code_path)
                                     <a href="{{ route('stock.batch.barcode', $batch->batch_id) }}" class="btn btn-sm btn-primary">View QR Code</a>
@@ -41,7 +65,7 @@
                                 @endif
                             </td>
                             <td>
-                                <div class="flex gap-2" style="display: flex; gap: 0.5rem;">
+                                <div class="flex gap-2 justify-center" style="display: flex; gap: 0.5rem; justify-content: center;">
                                     <a href="{{ route('stock.batch.edit', $batch->batch_id) }}" class="btn btn-sm btn-secondary" title="Edit">
                                         <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                     </a>

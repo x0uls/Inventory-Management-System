@@ -3,7 +3,7 @@
 @section('title', 'New Sale')
 
 @section('content')
-<x-page-header title="New Sale" description="Process a new sales transaction" />
+<x-page-header title="New Sale" description="Process a new sales transaction" :center="true" />
 
 <div class="card" style="max-width: 900px; margin: 0 auto;">
     <div class="card-body">

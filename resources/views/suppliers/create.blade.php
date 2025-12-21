@@ -3,7 +3,7 @@
 @section('title', 'Add Supplier')
 
 @section('content')
-<x-page-header title="Add Supplier" description="Create a new supplier" />
+<x-page-header title="Add Supplier" description="Create a new supplier" :center="true" />
 
 <div class="card" style="max-width: 800px; margin: 0 auto;">
     <div class="card-body">

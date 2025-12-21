@@ -3,7 +3,7 @@
 @section('title', 'Generate QR Code')
 
 @section('content')
-<x-page-header title="Generate QR Code" description="Create new batches and QR codes" />
+<x-page-header title="Generate QR Code" description="Create new batches and QR codes" :center="true" />
 
 <div class="card" style="max-width: 600px; margin: 0 auto;">
     <div class="card-body">
@@ -30,7 +30,12 @@
             </div>
 
             <!-- Expiry Date -->
-            <x-input name="expiry_date" type="date" label="Expiry Date" />
+            <div class="form-group">
+                <label class="form-label">Expiry Date</label>
+                <input type="text" class="form-input" id="display_expiry_date" placeholder="DD-MM-YYYY" oninput="formatDateInput(this)">
+                <input type="hidden" name="expiry_date" id="expiry_date">
+                <p style="font-size: 0.8em; color: var(--color-slate-500); margin-top: 0.25rem;">Format: DD-MM-YYYY</p>
+            </div>
 
             <!-- Quantity -->
             <x-input name="quantity" type="number" label="Quantity" placeholder="Enter quantity" required value="1" />
@@ -44,6 +49,25 @@
 </div>
 
 <script>
+    function formatDateInput(input) {
+        let v = input.value.replace(/\D/g, '').slice(0, 8);
+        if (v.length >= 5) {
+            v = v.slice(0, 2) + '-' + v.slice(2, 4) + '-' + v.slice(4);
+        } else if (v.length >= 3) {
+            v = v.slice(0, 2) + '-' + v.slice(2);
+        }
+        input.value = v;
+
+        // Update hidden input for backend (Y-m-d)
+        if (v.length === 10) {
+            const parts = v.split('-');
+            // Input: DD-MM-YYYY -> Output: YYYY-MM-DD
+            document.getElementById('expiry_date').value = `${parts[2]}-${parts[1]}-${parts[0]}`;
+        } else {
+            document.getElementById('expiry_date').value = '';
+        }
+    }
+
 // Store products data for filtering
 @php
     $productsForJs = \App\Models\Product::all()->map(function($p) {

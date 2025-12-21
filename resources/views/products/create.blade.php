@@ -3,7 +3,7 @@
 @section('title', 'Add Product')
 
 @section('content')
-<x-page-header title="Add Product" description="Create a new product" />
+<x-page-header title="Add Product" description="Create a new product" :center="true" />
 
 <div class="card" style="max-width: 800px; margin: 0 auto;">
     <div class="card-body">
@@ -77,8 +77,8 @@
             <div class="form-group">
                 <label for="unit_price" class="form-label">Unit Price</label>
                 <div style="position: relative;">
-                    <span style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--color-slate-500);">$</span>
-                    <input type="number" name="unit_price" id="unit_price" class="form-input" value="{{ old('unit_price') }}" step="0.01" min="0" style="padding-left: 2rem;" required>
+                    <span style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--color-slate-500);">RM</span>
+                    <input type="number" name="unit_price" id="unit_price" class="form-input" value="{{ old('unit_price') }}" step="0.01" min="0" style="padding-left: 2.5rem;" required>
                 </div>
                 @error('unit_price')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
