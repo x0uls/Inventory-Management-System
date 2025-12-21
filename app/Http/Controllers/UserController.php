@@ -69,15 +69,24 @@ class UserController extends Controller
 
     public function store(StoreUserRequest $request): RedirectResponse
     {
+        // Find gaps in IDs
+        $ids = User::orderBy('user_id', 'asc')->pluck('user_id')->toArray();
+        $newId = 1;
+        foreach ($ids as $id) {
+            if ($id != $newId) {
+                break;
+            }
+            $newId++;
+        }
+
         User::create([
+            'user_id' => $newId,
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'roles' => Group::find($request->group_id)->group_name,
             'group_id' => $request->group_id,
         ]);
-
-
 
         return redirect()->route('users.index')
             ->with('success', 'User created successfully.');

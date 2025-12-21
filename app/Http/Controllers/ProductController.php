@@ -58,6 +58,17 @@ class ProductController extends Controller
 
         $data = $request->all();
 
+        // Find gaps in IDs
+        $ids = Product::orderBy('product_id', 'asc')->pluck('product_id')->toArray();
+        $newId = 1;
+        foreach ($ids as $id) {
+            if ($id != $newId) {
+                break;
+            }
+            $newId++;
+        }
+        $data['product_id'] = $newId;
+
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('products', 'public');
             $data['image_path'] = 'storage/' . $path;

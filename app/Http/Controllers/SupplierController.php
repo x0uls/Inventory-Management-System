@@ -56,7 +56,20 @@ class SupplierController extends Controller
             'address' => ['nullable', 'string'],
         ]);
 
-        Supplier::create($request->all());
+        $data = $request->all();
+
+        // Find gaps in IDs
+        $ids = Supplier::orderBy('supplier_id', 'asc')->pluck('supplier_id')->toArray();
+        $newId = 1;
+        foreach ($ids as $id) {
+            if ($id != $newId) {
+                break;
+            }
+            $newId++;
+        }
+        $data['supplier_id'] = $newId;
+
+        Supplier::create($data);
 
         return redirect()->route('suppliers.index')
             ->with('success', 'Supplier created successfully.');

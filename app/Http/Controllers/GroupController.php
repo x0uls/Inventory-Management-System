@@ -47,7 +47,18 @@ class GroupController extends Controller
             'description' => ['nullable', 'string', 'max:500'],
         ]);
 
+        // Find gaps in IDs
+        $ids = Group::orderBy('group_id', 'asc')->pluck('group_id')->toArray();
+        $newId = 1;
+        foreach ($ids as $id) {
+            if ($id != $newId) {
+                break;
+            }
+            $newId++;
+        }
+
         Group::create([
+            'group_id' => $newId,
             'group_name' => $request->group_name,
             'description' => $request->description,
         ]);

@@ -168,3 +168,13 @@ Two distinct bugs were identified during development. Below is the record of the
 | **Root Cause** | **Object-to-String Conversion Error**: The validation rule used `$this->route('user')` directly, which returns a User object model. When concatenated into the validation string, it was converted to its JSON representation (e.g., `{"id":1, "name":"Staff"...}`), causing the SQL query parser to interpret JSON keys as column names. |
 | **The Fix** | Updated `UpdateUserRequest.php` to explicitly access the ID property: `$this->route('user')->user_id`. This passes the integer ID (e.g., `1`) to the validation rule instead of the JSON string. |
 | **Status** | **Resolved** |
+
+### Bug Record #7
+| Field | Details |
+| :--- | :--- |
+| **Bug ID** | BUG-007 |
+| **Module** | User Access Control (RBAC) |
+| **The Issue** | Staff members could view "Edit/Delete" buttons and potentially access restricted actions because the system failed to recognize their role. |
+| **Root Cause** | **Case Sensitivity Mismatch**: The database stored roles with capitalization (e.g., "Staff") as they were copied from Group names, but the application code checked for strict lowercase equality (`=== 'staff'`),causing checks to fail. |
+| **The Fix** | Implemented `strtolower()` normalization across all role checks in Controllers (`SupplierController`, `StockController`) and Views (`dashboard`, `suppliers`, `users`, `groups`). This ensures "Staff", "staff", and "STAFF" are all treated correctly as restricted users. |
+| **Status** | **Resolved** |
