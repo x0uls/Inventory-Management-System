@@ -94,15 +94,16 @@ class ProductController extends Controller
         // Handle image removal
         if ($request->has('remove_image') && $request->remove_image) {
             if ($product->image_path && file_exists(public_path($product->image_path))) {
-                unlink(public_path($product->image_path));
+                unlink(public_path($product->image_path)); //physical delete
             }
             $data['image_path'] = null;
         }
 
+        // Handle image replacement (Upload new, delete old)
         if ($request->hasFile('image')) {
             // Delete old image if exists
             if ($product->image_path && file_exists(public_path($product->image_path))) {
-                unlink(public_path($product->image_path));
+                unlink(public_path($product->image_path)); //physical delete
             }
             
             $path = $request->file('image')->store('products', 'public');
