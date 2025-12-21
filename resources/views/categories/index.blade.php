@@ -26,7 +26,7 @@
 </div>
 
 <!-- Add Category Button -->
-@if(auth()->user()->roles !== 'staff')
+@if(strtolower(auth()->user()->roles) !== 'staff')
 <div style="margin-bottom: 1.5rem;">
     <a href="{{ route('categories.create') }}" class="btn btn-success">
         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">

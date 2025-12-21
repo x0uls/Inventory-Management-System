@@ -19,6 +19,11 @@
                 <input type="password" name="password" class="form-input" placeholder="Enter new password">
             </div>
 
+            <div class="form-group">
+                <label class="form-label">Confirm Password</label>
+                <input type="password" name="password_confirmation" class="form-input" placeholder="Confirm new password">
+            </div>
+
             <x-select name="group_id" label="User Group" required placeholder="Select user group">
                 @foreach(\App\Models\Group::all() as $group)
                     <option value="{{ $group->group_id }}" {{ old('group_id', $user->group_id) == $group->group_id ? 'selected' : '' }}>
