@@ -69,53 +69,105 @@
         </div>
         <div class="card-body">
             <div class="grid grid-cols-2 gap-4">
-                <a href="#" class="quick-action-btn">
-                    <div class="quick-action-icon" style="background: rgba(102, 126, 234, 0.1);">
-                        <svg fill="none" stroke="var(--color-primary)" viewBox="0 0 24 24" style="width: 20px; height: 20px;">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                        </svg>
-                    </div>
-                    <div class="quick-action-content">
-                        <div class="quick-action-title">Add Product</div>
-                        <div class="quick-action-desc">Register new item</div>
-                    </div>
-                </a>
+                @if(strtolower(auth()->user()->roles) === 'admin')
+                    {{-- Admin Actions --}}
+                    <a href="{{ route('products.create') }}" class="quick-action-btn">
+                        <div class="quick-action-icon" style="background: rgba(102, 126, 234, 0.1);">
+                            <svg fill="none" stroke="var(--color-primary)" viewBox="0 0 24 24" style="width: 20px; height: 20px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                            </svg>
+                        </div>
+                        <div class="quick-action-content">
+                            <div class="quick-action-title">Add Product</div>
+                            <div class="quick-action-desc">Register new item</div>
+                        </div>
+                    </a>
 
-                <a href="#" class="quick-action-btn">
-                    <div class="quick-action-icon" style="background: rgba(16, 185, 129, 0.1);">
-                        <svg fill="none" stroke="var(--color-success)" viewBox="0 0 24 24" style="width: 20px; height: 20px;">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                    </div>
-                    <div class="quick-action-content">
-                        <div class="quick-action-title">New Sale</div>
-                        <div class="quick-action-desc">Record transaction</div>
-                    </div>
-                </a>
+                    <a href="{{ route('sales.create') }}" class="quick-action-btn">
+                        <div class="quick-action-icon" style="background: rgba(16, 185, 129, 0.1);">
+                            <svg fill="none" stroke="var(--color-success)" viewBox="0 0 24 24" style="width: 20px; height: 20px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <div class="quick-action-content">
+                            <div class="quick-action-title">New Sale</div>
+                            <div class="quick-action-desc">Record transaction</div>
+                        </div>
+                    </a>
 
-                <a href="#" class="quick-action-btn">
-                    <div class="quick-action-icon" style="background: rgba(245, 158, 11, 0.1);">
-                        <svg fill="none" stroke="var(--color-warning)" viewBox="0 0 24 24" style="width: 20px; height: 20px;">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                        </svg>
-                    </div>
-                    <div class="quick-action-content">
-                        <div class="quick-action-title">Stock Update</div>
-                        <div class="quick-action-desc">Adjust inventory</div>
-                    </div>
-                </a>
+                    <a href="{{ route('stock.index') }}" class="quick-action-btn">
+                        <div class="quick-action-icon" style="background: rgba(245, 158, 11, 0.1);">
+                            <svg fill="none" stroke="var(--color-warning)" viewBox="0 0 24 24" style="width: 20px; height: 20px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
+                        </div>
+                        <div class="quick-action-content">
+                            <div class="quick-action-title">Stock Update</div>
+                            <div class="quick-action-desc">Adjust inventory</div>
+                        </div>
+                    </a>
 
-                <a href="#" class="quick-action-btn">
-                    <div class="quick-action-icon" style="background: rgba(102, 126, 234, 0.1);">
-                        <svg fill="none" stroke="var(--color-primary)" viewBox="0 0 24 24" style="width: 20px; height: 20px;">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                        </svg>
-                    </div>
-                    <div class="quick-action-content">
-                        <div class="quick-action-title">Add Supplier</div>
-                        <div class="quick-action-desc">New vendor</div>
-                    </div>
-                </a>
+                    <a href="{{ route('suppliers.create') }}" class="quick-action-btn">
+                        <div class="quick-action-icon" style="background: rgba(102, 126, 234, 0.1);">
+                            <svg fill="none" stroke="var(--color-primary)" viewBox="0 0 24 24" style="width: 20px; height: 20px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                            </svg>
+                        </div>
+                        <div class="quick-action-content">
+                            <div class="quick-action-title">Add Supplier</div>
+                            <div class="quick-action-desc">New vendor</div>
+                        </div>
+                    </a>
+                @else
+                    {{-- Staff Actions --}}
+                    <a href="{{ route('sales.create') }}" class="quick-action-btn">
+                        <div class="quick-action-icon" style="background: rgba(16, 185, 129, 0.1);">
+                            <svg fill="none" stroke="var(--color-success)" viewBox="0 0 24 24" style="width: 20px; height: 20px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <div class="quick-action-content">
+                            <div class="quick-action-title">New Sale</div>
+                            <div class="quick-action-desc">Record transaction</div>
+                        </div>
+                    </a>
+
+                    <a href="{{ route('products.index') }}" class="quick-action-btn">
+                        <div class="quick-action-icon" style="background: rgba(102, 126, 234, 0.1);">
+                            <svg fill="none" stroke="var(--color-primary)" viewBox="0 0 24 24" style="width: 20px; height: 20px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </div>
+                        <div class="quick-action-content">
+                            <div class="quick-action-title">View Products</div>
+                            <div class="quick-action-desc">Search catalog</div>
+                        </div>
+                    </a>
+
+                    <a href="{{ route('stock.index') }}" class="quick-action-btn">
+                        <div class="quick-action-icon" style="background: rgba(245, 158, 11, 0.1);">
+                            <svg fill="none" stroke="var(--color-warning)" viewBox="0 0 24 24" style="width: 20px; height: 20px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
+                        </div>
+                        <div class="quick-action-content">
+                            <div class="quick-action-title">Stock Update</div>
+                            <div class="quick-action-desc">Adjust inventory</div>
+                        </div>
+                    </a>
+
+                    <a href="{{ route('stock.generate-qrcode') }}" class="quick-action-btn">
+                        <div class="quick-action-icon" style="background: rgba(59, 130, 246, 0.1);">
+                            <svg fill="none" stroke="var(--color-info)" viewBox="0 0 24 24" style="width: 20px; height: 20px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                            </svg>
+                        </div>
+                        <div class="quick-action-content">
+                            <div class="quick-action-title">Generate QR</div>
+                            <div class="quick-action-desc">Product labels</div>
+                        </div>
+                    </a>
+                @endif
             </div>
         </div>
     </div>

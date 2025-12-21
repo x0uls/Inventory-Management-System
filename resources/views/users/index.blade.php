@@ -15,8 +15,8 @@
             <div style="width: 200px;">
                 <select name="role" class="form-select">
                     <option value="all" {{ $currentRole === 'all' ? 'selected' : '' }}>All User Groups</option>
-                    @foreach($roles as $role)
-                        <option value="{{ $role }}" {{ $currentRole === $role ? 'selected' : '' }}>{{ ucfirst($role) }}</option>
+                    @foreach($groups as $group)
+                        <option value="{{ $group->group_name }}" {{ $currentRole === $group->group_name ? 'selected' : '' }}>{{ ucfirst($group->group_name) }}</option>
                     @endforeach
                 </select>
             </div>
@@ -29,6 +29,7 @@
 </div>
 
 <!-- Add User Button -->
+@if(strtolower(auth()->user()->roles) !== 'staff')
 <div style="margin-bottom: 1.5rem;">
     <a href="{{ route('users.create') }}" class="btn btn-success">
         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -37,6 +38,7 @@
         Add User
     </a>
 </div>
+@endif
 
 <!-- Users Table -->
 <div class="table-container" id="users-table-container">

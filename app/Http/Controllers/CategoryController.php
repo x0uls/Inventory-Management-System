@@ -52,7 +52,18 @@ class CategoryController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
+        // Find gaps in IDs
+        $ids = Category::orderBy('category_id', 'asc')->pluck('category_id')->toArray();
+        $newId = 1;
+        foreach ($ids as $id) {
+            if ($id != $newId) {
+                break;
+            }
+            $newId++;
+        }
+
         Category::create([
+            'category_id' => $newId,
             'category_name' => $request->category_name,
             'description' => $request->description,
         ]);

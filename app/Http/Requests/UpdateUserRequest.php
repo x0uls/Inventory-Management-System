@@ -14,11 +14,11 @@ class UpdateUserRequest extends FormRequest
 
     public function rules(): array
     {
-        $userId = $this->route('user');
+        $userId = $this->route('user')->user_id;
 
         return [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $userId . ',user_id'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$userId.',user_id'],
             'password' => ['nullable', 'string', Password::defaults(), 'confirmed'],
             'group_id' => ['required', 'exists:user_groups,group_id'],
         ];

@@ -33,7 +33,7 @@ class SupplierController extends Controller
 
     public function create(): View
     {
-        if (auth()->user()->roles === 'staff') {
+        if (strtolower(auth()->user()->roles) === 'staff') {
             abort(403, 'Unauthorized action.');
         }
 
@@ -43,7 +43,7 @@ class SupplierController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        if ($request->user()->roles === 'staff') {
+        if (strtolower($request->user()->roles) === 'staff') {
             abort(403, 'Unauthorized action.');
         }
 
@@ -56,7 +56,20 @@ class SupplierController extends Controller
             'address' => ['nullable', 'string'],
         ]);
 
-        Supplier::create($request->all());
+        $data = $request->all();
+
+        // Find gaps in IDs
+        $ids = Supplier::orderBy('supplier_id', 'asc')->pluck('supplier_id')->toArray();
+        $newId = 1;
+        foreach ($ids as $id) {
+            if ($id != $newId) {
+                break;
+            }
+            $newId++;
+        }
+        $data['supplier_id'] = $newId;
+
+        Supplier::create($data);
 
         return redirect()->route('suppliers.index')
             ->with('success', 'Supplier created successfully.');
@@ -64,7 +77,7 @@ class SupplierController extends Controller
 
     public function edit(Supplier $supplier): View
     {
-        if (auth()->user()->roles === 'staff') {
+        if (strtolower(auth()->user()->roles) === 'staff') {
             abort(403, 'Unauthorized action.');
         }
 
@@ -74,7 +87,7 @@ class SupplierController extends Controller
 
     public function update(Request $request, Supplier $supplier): RedirectResponse
     {
-        if ($request->user()->roles === 'staff') {
+        if (strtolower($request->user()->roles) === 'staff') {
             abort(403, 'Unauthorized action.');
         }
 
@@ -95,7 +108,7 @@ class SupplierController extends Controller
 
     public function destroy(Supplier $supplier): RedirectResponse
     {
-        if (request()->user()->roles === 'staff') {
+        if (strtolower(request()->user()->roles) === 'staff') {
             abort(403, 'Unauthorized action.');
         }
 
