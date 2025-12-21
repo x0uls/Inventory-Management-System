@@ -240,7 +240,7 @@ class StockController extends Controller
 
     public function destroyBatch($id)
     {
-        if (request()->user()->roles === 'staff') {
+        if (strtolower(request()->user()->roles) === 'staff') {
             return response()->json(['message' => 'Unauthorized action.'], 403);
         }
         $batch = Batch::withCount('sales')->findOrFail($id);

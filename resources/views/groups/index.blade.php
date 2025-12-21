@@ -21,6 +21,7 @@
 </div>
 
 <!-- Add Group Button -->
+@if(strtolower(auth()->user()->roles) !== 'staff')
 <div style="margin-bottom: 1.5rem;">
     <a href="{{ route('groups.create') }}" class="btn btn-success">
         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -29,6 +30,7 @@
         Add Group
     </a>
 </div>
+@endif
 
 <!-- Groups Table -->
 <div class="table-container" id="groups-table-container">

@@ -69,7 +69,7 @@
         </div>
         <div class="card-body">
             <div class="grid grid-cols-2 gap-4">
-                @if(auth()->user()->roles === 'admin')
+                @if(strtolower(auth()->user()->roles) === 'admin')
                     {{-- Admin Actions --}}
                     <a href="{{ route('products.create') }}" class="quick-action-btn">
                         <div class="quick-action-icon" style="background: rgba(102, 126, 234, 0.1);">

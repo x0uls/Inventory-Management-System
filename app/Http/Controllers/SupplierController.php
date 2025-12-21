@@ -33,7 +33,7 @@ class SupplierController extends Controller
 
     public function create(): View
     {
-        if (auth()->user()->roles === 'staff') {
+        if (strtolower(auth()->user()->roles) === 'staff') {
             abort(403, 'Unauthorized action.');
         }
 
@@ -43,7 +43,7 @@ class SupplierController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        if ($request->user()->roles === 'staff') {
+        if (strtolower($request->user()->roles) === 'staff') {
             abort(403, 'Unauthorized action.');
         }
 
@@ -64,7 +64,7 @@ class SupplierController extends Controller
 
     public function edit(Supplier $supplier): View
     {
-        if (auth()->user()->roles === 'staff') {
+        if (strtolower(auth()->user()->roles) === 'staff') {
             abort(403, 'Unauthorized action.');
         }
 
@@ -74,7 +74,7 @@ class SupplierController extends Controller
 
     public function update(Request $request, Supplier $supplier): RedirectResponse
     {
-        if ($request->user()->roles === 'staff') {
+        if (strtolower($request->user()->roles) === 'staff') {
             abort(403, 'Unauthorized action.');
         }
 
@@ -95,7 +95,7 @@ class SupplierController extends Controller
 
     public function destroy(Supplier $supplier): RedirectResponse
     {
-        if (request()->user()->roles === 'staff') {
+        if (strtolower(request()->user()->roles) === 'staff') {
             abort(403, 'Unauthorized action.');
         }
 
