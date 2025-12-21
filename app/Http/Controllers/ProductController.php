@@ -58,6 +58,17 @@ class ProductController extends Controller
 
         $data = $request->all();
 
+        // Find gaps in IDs
+        $ids = Product::orderBy('product_id', 'asc')->pluck('product_id')->toArray();
+        $newId = 1;
+        foreach ($ids as $id) {
+            if ($id != $newId) {
+                break;
+            }
+            $newId++;
+        }
+        $data['product_id'] = $newId;
+
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('products', 'public');
             $data['image_path'] = 'storage/' . $path;
@@ -94,16 +105,15 @@ class ProductController extends Controller
         // Handle image removal
         if ($request->has('remove_image') && $request->remove_image) {
             if ($product->image_path && file_exists(public_path($product->image_path))) {
-                unlink(public_path($product->image_path)); //physical delete
+                unlink(public_path($product->image_path));
             }
             $data['image_path'] = null;
         }
 
-        // Handle image replacement (Upload new, delete old)
         if ($request->hasFile('image')) {
             // Delete old image if exists
             if ($product->image_path && file_exists(public_path($product->image_path))) {
-                unlink(public_path($product->image_path)); //physical delete
+                unlink(public_path($product->image_path));
             }
             
             $path = $request->file('image')->store('products', 'public');
