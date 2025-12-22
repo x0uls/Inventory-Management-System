@@ -39,12 +39,20 @@ class ProductController extends Controller
 
     public function create(): View
     {
+        if (strtolower(auth()->user()->roles) === 'staff') {
+            abort(403, 'Unauthorized action.');
+        }
+
         $categories = Category::orderBy('category_name')->get();
         return view('products.create', compact('categories'));
     }
 
     public function store(Request $request): RedirectResponse
     {
+        if (strtolower($request->user()->roles) === 'staff') {
+            abort(403, 'Unauthorized action.');
+        }
+
         $request->validate([
             'product_name' => ['required', 'string', 'max:255', 'unique:products,product_name'],
             'description' => ['nullable', 'string'],
@@ -82,12 +90,20 @@ class ProductController extends Controller
 
     public function edit(Product $product): View
     {
+        if (strtolower(auth()->user()->roles) === 'staff') {
+            abort(403, 'Unauthorized action.');
+        }
+
         $categories = Category::orderBy('category_name')->get();
         return view('products.edit', compact('product', 'categories'));
     }
 
     public function update(Request $request, Product $product): RedirectResponse
     {
+        if (strtolower($request->user()->roles) === 'staff') {
+            abort(403, 'Unauthorized action.');
+        }
+
         $request->validate([
             'product_name' => ['required', 'string', 'max:255', 'unique:products,product_name,' . $product->product_id . ',product_id'],
             'description' => ['nullable', 'string'],
@@ -128,6 +144,10 @@ class ProductController extends Controller
 
     public function destroy(Product $product): RedirectResponse
     {
+        if (strtolower(request()->user()->roles) === 'staff') {
+            abort(403, 'Unauthorized action.');
+        }
+
         // Check if product has batches
         if ($product->batches()->count() > 0) {
             return redirect()->route('products.index')

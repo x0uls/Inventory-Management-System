@@ -39,7 +39,7 @@ class CategoryController extends Controller
 
     public function create(): View
     {
-        if (auth()->user()->roles === 'staff') {
+        if (strtolower(auth()->user()->roles) === 'staff') {
             abort(403, 'Unauthorized action.');
         }
 
@@ -48,7 +48,7 @@ class CategoryController extends Controller
 
     public function store(StoreCategoryRequest $request): RedirectResponse
     {
-        if ($request->user()->roles === 'staff') {
+        if (strtolower($request->user()->roles) === 'staff') {
             abort(403, 'Unauthorized action.');
         }
 
@@ -78,7 +78,7 @@ class CategoryController extends Controller
 
     public function edit(Category $category): View
     {
-        if (auth()->user()->roles === 'staff') {
+        if (strtolower(auth()->user()->roles) === 'staff') {
             abort(403, 'Unauthorized action.');
         }
 
@@ -89,7 +89,7 @@ class CategoryController extends Controller
 
     public function update(UpdateCategoryRequest $request, Category $category): RedirectResponse
     {
-        if ($request->user()->roles === 'staff') {
+        if (strtolower($request->user()->roles) === 'staff') {
             abort(403, 'Unauthorized action.');
         }
 
@@ -106,8 +106,13 @@ class CategoryController extends Controller
 
     public function destroy(Category $category): RedirectResponse
     {
-        if (request()->user()->roles === 'staff') {
+        if (strtolower(request()->user()->roles) === 'staff') {
             abort(403, 'Unauthorized action.');
+        }
+
+        if ($category->products()->count() > 0) {
+            return redirect()->route('categories.index')
+                ->with('error', 'Cannot delete category associated with existing products.');
         }
 
         $category->delete();
