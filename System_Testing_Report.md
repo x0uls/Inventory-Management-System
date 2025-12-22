@@ -25,81 +25,203 @@ At the system planning stage, the first testing strategy that will be used is Un
 
 ## 2. Test Cases
 
-### Test Case 1: User Login
+### Test Case 1: User Login & Access Control
 **Functional Requirement:** 1. User Login & Access Control
 
-| Test Case #: TC_001 | Test Case Name: Admin User Login |
+| Test Case #: TC_001 | Test Case Name: User Authentication & RBAC |
 | :--- | :--- |
 | **System:** Inventory Management System | **Subsystem:** Authentication Module |
 | **Design By:** Developer | **Design Date:** 01/12/2025 |
 | **Executed By:** Tester | **Execution Date:** 19/12/2025 |
-| **Short Description:** Verify that a registered admin can successfully log in and access the dashboard. | |
+| **Short Description:** Verify login validation, invalid credential handling, and role-based access redirection. | |
 
 **Pre-conditions:**
-*   Database is seeded with a valid admin user (username: `admin`, password: `password`).
-*   System is running on localhost.
+*   Database seeded with Admin (`admin`/`password`) and Staff (`staff`/`password`) users.
+*   System running on localhost.
 
 | Step | Action/Functions | Test Data | Expected System Response | Actual Response | Pass/Fail | Comments |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 1 | Navigate to Login Page | URL: `/login` | Login form is displayed. | Login form displayed. | **Pass** | |
-| 2 | Enter Valid Credentials | User: `admin`<br>Pass: `password` | System redirects to Dashboard. | Redirected to Dashboard. | **Pass** | |
-| 3 | Verify Access Rights | N/A | "Admin Dashboard" header is visible. | Header is visible. | **Pass** | |
-| 4 | Attempt Invalid Login | User: `wrong`<br>Pass: `wrong` | Error message "Invalid credentials" displayed. | Error message shown. | **Pass** | |
+| 1 | Navigate to Login Page | URL: `/login` | Login form displayed. | Form displayed. | **Pass** | |
+| 2 | Enter Invalid Credentials | User: `wrong` | Error: "Invalid login credentials". | Error shown. | **Pass** | |
+| 3 | Enter Valid Admin Credentials | User: `admin` | Redirect to Dashboard. Admin controls visible. | Redirected. Admin controls visible. | **Pass** | |
+| 4 | Log out and Login as Staff | User: `staff` | Redirect to Dashboard. Restricted controls (View Only). | Redirected. "View Only" displayed on protected items. | **Pass** | **Resolved in Bug #7** (RBAC) |
 
 **Post-conditions:**
-*   User session is authenticated and stored.
+*   User session stored securely.
 
 <br>
 
-### Test Case 2: Batch Management (Add & Edit)
+### Test Case 2: User & User Group Management
+**Functional Requirement:** 2. User & User Group Management
+
+| Test Case #: TC_002 | Test Case Name: User CRUD & Group Validation |
+| :--- | :--- |
+| **System:** Inventory Management System | **Subsystem:** User Management |
+| **Design By:** Developer | **Design Date:** 02/12/2025 |
+| **Executed By:** Tester | **Execution Date:** 19/12/2025 |
+| **Short Description:** Verify creating users, updating groups, and validation logic. | |
+
+**Pre-conditions:**
+*   Logged in as Admin.
+
+| Step | Action/Functions | Test Data | Expected System Response | Actual Response | Pass/Fail | Comments |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 1 | Create New Group | Name: "Managers" | Group saved. | Saved successfully. | **Pass** | |
+| 2 | Filter Users by Group | Filter: "Managers" | List updates to show linked users. | List updated correctly. | **Pass** | **Resolved in Bug #5** |
+| 3 | Edit User Details | Name: "New Name" | User record updated. | Updated. | **Pass** | **Resolved in Bug #6** |
+| 4 | Change User Password | Pass: `newpass` | Password updated. | Password updated. | **Pass** | **Resolved in Bug #8** |
+
+**Post-conditions:**
+*   User and Group records updated in database.
+
+<br>
+
+### Test Case 3: Product Management
+**Functional Requirement:** 3. Product Management
+
+| Test Case #: TC_003 | Test Case Name: Product Creation & Validation |
+| :--- | :--- |
+| **System:** Inventory Management System | **Subsystem:** Products Module |
+| **Design By:** Developer | **Design Date:** 03/12/2025 |
+| **Executed By:** Tester | **Execution Date:** 19/12/2025 |
+| **Short Description:** Verify adding products, validating unique names, and updating details. | |
+
+**Pre-conditions:**
+*   Logged in as Admin. Categories and Suppliers exist.
+
+| Step | Action/Functions | Test Data | Expected System Response | Actual Response | Pass/Fail | Comments |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 1 | Add New Product | Name: "Apple" | Product saved. Details displayed. | Saved. | **Pass** | |
+| 2 | Add Duplicate Product | Name: "Apple" | Error: "The product name has already been taken." | Error shown. | **Pass** | **Resolved in Bug #4** |
+| 3 | Update Product | Price: 15.00 | Record updated. | Updated. | **Pass** | |
+| 4 | Delete Product | N/A | Product removed. | Removed. | **Pass** | |
+
+**Post-conditions:**
+*   Product database table updated.
+
+<br>
+
+### Test Case 4: Inventory Management
 **Functional Requirement:** 4. Inventory Management
 
-| Test Case #: TC_002 | Test Case Name: Add and Edit Product Batch |
+| Test Case #: TC_004 | Test Case Name: ID Recycling & Batch/QR Tracking |
 | :--- | :--- |
 | **System:** Inventory Management System | **Subsystem:** Stock Module |
 | **Design By:** Developer | **Design Date:** 05/12/2025 |
 | **Executed By:** Tester | **Execution Date:** 19/12/2025 |
-| **Short Description:** Verify staff can add a new stock batch and edit its quantity. | |
+| **Short Description:** Verify stock addition, ID recycling, and QR code generation. | |
 
 **Pre-conditions:**
-*   User is logged in as Staff/Admin.
-*   At least one Product exists (e.g., "Coca Cola").
+*   Logged in as Admin. Product "Apple" exists.
 
 | Step | Action/Functions | Test Data | Expected System Response | Actual Response | Pass/Fail | Comments |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 1 | Click "Add Stock" | Product: "Coca Cola"<br>Qty: 50 | New batch created. QR Code generated. | Batch #B001 created. | **Pass** | |
-| 2 | Click "View Batches" | N/A | List of batches for product displayed. | List displayed. | **Pass** | |
-| 3 | Click "Edit" on Batch | Batch #B001 | Edit form opens with current data. | Form opened. | **Pass** | |
-| 4 | Update Quantity (Valid) | Qty: 60 | System saves and updates list to 60. | Updated to 60. | **Pass** | |
-| 5 | Update Quantity (Invalid) | Qty: -10 | System prevents save & shows error. | Alert: "Quantity must be > 0". | **Pass** | Fixed in Bug #2 |
+| 1 | Add Stock for Product | Qty: 50 | New batch created. QR Code generated. | Batch created. QR generated. | **Pass** | |
+| 2 | Edit Batch Quantity | Qty: -5 | Error: "Quantity must be > 0". | Error shown. | **Pass** | **Resolved in Bug #2** |
+| 3 | Delete Batch | N/A | Batch deleted. ID becomes available. | Deleted. | **Pass** | |
+| 4 | Add New Batch (Reuse ID) | N/A | System reuses the deleted Batch ID (Gap filling). | ID reused (Recycling logic). | **Pass** | Feature ID Recycling |
 
 **Post-conditions:**
-*   Inventory count reflects the new values. QR code file exists in storage.
+*   Stock levels updated. QR code files managed.
 
 <br>
 
-### Test Case 3: FIFO Sales Deduction
+### Test Case 5: Supplier Management
+**Functional Requirement:** 5. Supplier Management
+
+| Test Case #: TC_005 | Test Case Name: Supplier CRUD Operations |
+| :--- | :--- |
+| **System:** Inventory Management System | **Subsystem:** Suppliers Module |
+| **Design By:** Developer | **Design Date:** 06/12/2025 |
+| **Executed By:** Tester | **Execution Date:** 19/12/2025 |
+| **Short Description:** Verify adding, updating, and viewing suppliers. | |
+
+**Pre-conditions:**
+*   Logged in as Admin.
+
+| Step | Action/Functions | Test Data | Expected System Response | Actual Response | Pass/Fail | Comments |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 1 | Add New Supplier | Name: "Fresh Farms" | Supplier saved in database. | Saved. | **Pass** | |
+| 2 | View Supplier List | N/A | List displays "Fresh Farms". | Displayed. | **Pass** | |
+| 3 | Edit Contact Info | Phone: "555-0123" | Record updated. | Updated. | **Pass** | |
+| 4 | Delete Supplier | N/A | Record removed. | Removed. | **Pass** | |
+
+**Post-conditions:**
+*   Supplier records updated.
+
+<br>
+
+### Test Case 6: Category Management
+**Functional Requirement:** 6. Category Management
+
+| Test Case #: TC_006 | Test Case Name: Category Classification & Safeguards |
+| :--- | :--- |
+| **System:** Inventory Management System | **Subsystem:** Category Module |
+| **Design By:** Developer | **Design Date:** 06/12/2025 |
+| **Executed By:** Tester | **Execution Date:** 19/12/2025 |
+| **Short Description:** Verify category creation and deletion integrity constraints. | |
+
+**Pre-conditions:**
+*   Logged in as Admin. Product "Apple" assigned to "Fruit" category.
+
+| Step | Action/Functions | Test Data | Expected System Response | Actual Response | Pass/Fail | Comments |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 1 | Create Category | Name: "Snacks" | Category saved. | Saved. | **Pass** | |
+| 2 | Create Duplicate | Name: "Snacks" | Error: Name must be unique. | Error shown. | **Pass** | **Resolved in Bug #4** (Same logic as Products) |
+| 3 | Delete "Fruit" Category | N/A | Error: "Cannot delete category associated with existing products." | Error shown. | **Pass** | Integrity Check |
+| 4 | Delete "Snacks" (Empty) | N/A | Category deleted. | Deleted. | **Pass** | |
+
+**Post-conditions:**
+*   Category list maintained with integrity.
+
+<br>
+
+### Test Case 7: Sales Record
 **Functional Requirement:** 7. Sales Record
 
-| Test Case #: TC_003 | Test Case Name: FIFO Stock Deduction |
+| Test Case #: TC_007 | Test Case Name: Sales Processing & FIFO Logic |
 | :--- | :--- |
 | **System:** Inventory Management System | **Subsystem:** Sales Module |
 | **Design By:** Developer | **Design Date:** 10/12/2025 |
 | **Executed By:** Tester | **Execution Date:** 19/12/2025 |
-| **Short Description:** Verify that sales deduct stock from the oldest batch first (FIFO). | |
+| **Short Description:** Verify sales transaction recording and FIFO stock deduction. | |
 
 **Pre-conditions:**
-*   Product "Milk" has: Batch A (Exp: 2025-01-01, Qty: 10), Batch B (Exp: 2025-02-01, Qty: 10).
+*   Product "Milk" has Batch A (Qty: 10, Old) and Batch B (Qty: 10, New).
 
 | Step | Action/Functions | Test Data | Expected System Response | Actual Response | Pass/Fail | Comments |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 1 | Add to Cart | Item: "Milk"<br>Qty: 15 | Item added to transaction list. | Added to list. | **Pass** | |
-| 2 | Complete Checkout | Payment: Cash | Transaction saved. Stock deducted. | Transaction Success. | **Pass** | |
-| 3 | Verify Batch A (Oldest) | N/A | Quantity should be 0. | Qty is 0. | **Pass** | Fully used. |
-| 4 | Verify Batch B (Newest) | N/A | Quantity should be 5 (15-10). | Qty is 5. | **Pass** | |
+| 1 | Process Sale | Item: "Milk", Qty: 15 | Transaction recorded. Stock deducted. | Success. | **Pass** | |
+| 2 | Verify Batch A | N/A | Quantity = 0 (Empty). | Qty is 0. | **Pass** | FIFO Logic |
+| 3 | Verify Batch B | N/A | Quantity = 5 (15-10). | Qty is 5. | **Pass** | FIFO Logic |
+| 4 | Check Output | N/A | Stock Level updated in database. | Updated. | **Pass** | |
 
 **Post-conditions:**
-*   Sales record created. Batch A marked as empty (QR potentially removed).
+*   Sales log stored. Inventory updated.
+
+<br>
+
+### Test Case 8: Report Generation
+**Functional Requirement:** 8. Report Generation
+
+| Test Case #: TC_008 | Test Case Name: Data Aggregation & Reporting |
+| :--- | :--- |
+| **System:** Inventory Management System | **Subsystem:** Reporting Module |
+| **Design By:** Developer | **Design Date:** 12/12/2025 |
+| **Executed By:** Tester | **Execution Date:** 19/12/2025 |
+| **Short Description:** Verify generation of inventory and sales summary reports. | |
+
+**Pre-conditions:**
+*   Sales transactions and inventory data exist.
+
+| Step | Action/Functions | Test Data | Expected System Response | Actual Response | Pass/Fail | Comments |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 1 | Generate Inventory Report | Filter: All | Shows total stock, restock history. | Report generated. | **Pass** | |
+| 2 | Generate Sales Report | Date: Today | Shows total sales amount and quantity. | Report generated. | **Pass** | |
+| 3 | Check Layout | N/A | Info is readable and styled correctly. | Layout correct. | **Pass** | **Resolved in Bug #3** (UI/CSS Fix) |
+
+**Post-conditions:**
+*   Reports displayed to user.
 
 ---
 
@@ -108,7 +230,7 @@ At the system planning stage, the first testing strategy that will be used is Un
 **Summary:**
 Testing confirmed that the core modules (Login, Stock, Sales) are functioning according to requirements. The FIFO logic correctly prioritizes older stock. 
 
-Two distinct bugs were identified during development. Below is the record of their diagnosis and resolution.
+Eight distinct bugs were identified during development. Below is the record of their diagnosis and resolution.
 
 ### Bug Record #1
 | Field | Details |
@@ -177,4 +299,14 @@ Two distinct bugs were identified during development. Below is the record of the
 | **The Issue** | Staff members could view "Edit/Delete" buttons and potentially access restricted actions because the system failed to recognize their role. |
 | **Root Cause** | **Case Sensitivity Mismatch**: The database stored roles with capitalization (e.g., "Staff") as they were copied from Group names, but the application code checked for strict lowercase equality (`=== 'staff'`),causing checks to fail. |
 | **The Fix** | Implemented `strtolower()` normalization across all role checks in Controllers (`SupplierController`, `StockController`) and Views (`dashboard`, `suppliers`, `users`, `groups`). This ensures "Staff", "staff", and "STAFF" are all treated correctly as restricted users. |
+| **Status** | **Resolved** |
+
+### Bug Record #8
+| Field | Details |
+| :--- | :--- |
+| **Bug ID** | BUG-008 |
+| **Module** | User Management |
+| **The Issue** | When attempting to update a user's password, the system returned a "password confirmation does not match" error, preventing the update. |
+| **Root Cause** | **Missing Form Field**: The `UpdateUserRequest` backend validation rule includes `'confirmed'`, which expects a matching `password_confirmation` field in the POST request. However, the `users.edit` Blade view only contained the `password` input field, missing the required confirmation field. |
+| **The Fix** | Added the `<input name="password_confirmation">` field to the `users/edit.blade.php` view. This ensures the confirmation value is sent to the ID, satisfying the validation rule. |
 | **Status** | **Resolved** |
