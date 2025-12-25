@@ -81,7 +81,7 @@
             <div class="form-group">
                 <label for="unit_price" class="form-label">Unit Price</label>
                 <div style="position: relative;">
-                    <span style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--color-slate-500);">$</span>
+                    <span style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--color-slate-500);">RM</span>
                     <input type="number" name="unit_price" id="unit_price" class="form-input" value="{{ old('unit_price', $product->unit_price) }}" step="0.01" min="0" style="padding-left: 2.5rem;" required>
                 </div>
                 @error('unit_price')
