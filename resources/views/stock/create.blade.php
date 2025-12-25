@@ -58,6 +58,11 @@
                         @endforeach
                     </x-select>
                 </div>
+
+                <!-- Display Batch Number -->
+                <div id="display-batch-info" style="margin-bottom: 1.5rem; padding: 0.75rem; background: var(--color-slate-100); color: var(--color-slate-700); border-radius: var(--radius-md); font-weight: 500; display: none;">
+                    Batch: <span id="visible-batch-number"></span>
+                </div>
                 
                 <!-- Hidden input for product_id when found via scan -->
                 <input type="hidden" name="product_id" id="step2-product-id-hidden">
@@ -125,6 +130,10 @@ function showStep2(batchNumber = null, product = null, expiryDate = null) {
 
     if (batchNumber) {
         batchInput.value = batchNumber;
+        document.getElementById('visible-batch-number').textContent = batchNumber;
+        document.getElementById('display-batch-info').style.display = 'block';
+    } else {
+        document.getElementById('display-batch-info').style.display = 'none';
     }
 
     if (product) {
@@ -141,6 +150,14 @@ function showStep2(batchNumber = null, product = null, expiryDate = null) {
 
     if (expiryDate) {
         expiryInput.value = expiryDate;
+        // Lock the expiry date
+        expiryInput.setAttribute('readonly', 'readonly');
+        expiryInput.style.backgroundColor = 'var(--color-slate-100)';
+        expiryInput.style.cursor = 'not-allowed';
+    } else {
+        expiryInput.removeAttribute('readonly');
+        expiryInput.style.backgroundColor = '';
+        expiryInput.style.cursor = '';
     }
 }
 

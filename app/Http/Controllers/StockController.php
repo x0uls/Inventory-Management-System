@@ -131,7 +131,7 @@ class StockController extends Controller
                     'batch_id' => $batch->batch_id,
                     'batch_number' => $batch->batch_number,
                     'quantity' => $batch->quantity,
-                    'expiry_date' => $batch->expiry_date,
+                    'expiry_date' => $batch->expiry_date ? $batch->expiry_date->format('Y-m-d') : null,
                     'product' => [
                         'product_id' => $batch->product->product_id,
                         'product_name' => $batch->product->product_name,
