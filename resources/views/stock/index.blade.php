@@ -18,7 +18,7 @@
                     <option value="low_stock" {{ $currentFilter === 'low_stock' ? 'selected' : '' }}>Low Stock</option>
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary">Search</button>
+
             @if($currentSearch || $currentFilter !== 'all')
                 <a href="{{ route('stock.index') }}" class="btn btn-secondary">Clear</a>
             @endif
