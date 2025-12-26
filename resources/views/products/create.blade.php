@@ -44,15 +44,15 @@
             </div>
 
             <div class="form-group">
-                <label for="product_name" class="form-label">Product Name</label>
-                <input type="text" name="product_name" id="product_name" class="form-input" value="{{ old('product_name') }}" required>
+                <label for="product_name" class="form-label required">Product Name</label>
+                <input type="text" name="product_name" id="product_name" class="form-input" value="{{ old('product_name') }}" maxlength="255" required>
                 @error('product_name')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
             </div>
 
             <div class="form-group">
-                <label for="category_id" class="form-label">Category</label>
+                <label for="category_id" class="form-label required">Category</label>
                 <select name="category_id" id="category_id" class="form-select" required>
                     <option value="">Select Category</option>
                     @foreach($categories as $category)
@@ -67,18 +67,19 @@
             </div>
 
             <div class="form-group">
-                <label for="description" class="form-label">Description</label>
-                <textarea name="description" id="description" class="form-input" rows="4">{{ old('description') }}</textarea>
+                <label for="description" class="form-label required">Description</label>
+                <textarea name="description" id="description" class="form-input" rows="4" maxlength="1000" required>{{ old('description') }}</textarea>
+                <p style="font-size: 0.8em; color: var(--color-slate-500); margin-top: 0.25rem;">Maximum 1000 characters</p>
                 @error('description')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
             </div>
 
             <div class="form-group">
-                <label for="unit_price" class="form-label">Unit Price</label>
+                <label for="unit_price" class="form-label required">Unit Price</label>
                 <div style="position: relative;">
                     <span style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--color-slate-500);">RM</span>
-                    <input type="number" name="unit_price" id="unit_price" class="form-input" value="{{ old('unit_price') }}" step="0.01" min="0" style="padding-left: 2.5rem;" required>
+                    <input type="number" name="unit_price" id="unit_price" class="form-input" value="{{ old('unit_price') }}" step="0.01" min="0" max="999999.99" style="padding-left: 2.5rem;" required>
                 </div>
                 @error('unit_price')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -86,10 +87,10 @@
             </div>
 
             <div class="form-group">
-                <label for="lowstock_alert" class="form-label">Low Stock Alert Level</label>
-                <input type="number" name="lowstock_alert" id="lowstock_alert" class="form-input" value="{{ old('lowstock_alert', 10) }}" min="0" required>
+                <label for="lowstock_alert" class="form-label required">Low Stock Alert Level</label>
+                <input type="number" name="lowstock_alert" id="lowstock_alert" class="form-input" value="{{ old('lowstock_alert', 10) }}" min="0" max="999999" required>
                 <p style="font-size: 0.875rem; color: var(--color-slate-500); margin-top: 0.5rem;">
-                    You will be notified when stock falls below this quantity.
+                    You will be notified when stock falls below this quantity. Maximum: 999,999
                 </p>
                 @error('lowstock_alert')
                     <span class="text-red-500 text-sm">{{ $message }}</span>

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
@@ -48,22 +50,11 @@ class ProductController extends Controller
         return view('products.create', compact('categories'));
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreProductRequest $request): RedirectResponse
     {
         if (strtolower($request->user()->roles) === 'staff') {
             abort(403, 'Unauthorized action.');
         }
-
-        $request->validate([
-            'product_name' => ['required', 'string', 'max:255', 'unique:products,product_name'],
-            'description' => ['nullable', 'string'],
-            'category_id' => ['required', 'exists:categories,category_id'],
-            'unit_price' => ['required', 'numeric', 'min:0'],
-            'lowstock_alert' => ['required', 'integer', 'min:0'],
-            'image' => ['nullable', 'image', 'max:2048'], // Max 2MB
-        ], [
-            'category_id.required' => 'The category field is required.',
-        ]);
 
         $data = $request->except(['image']);
 
@@ -99,23 +90,11 @@ class ProductController extends Controller
         return view('products.edit', compact('product', 'categories'));
     }
 
-    public function update(Request $request, Product $product): RedirectResponse
+    public function update(UpdateProductRequest $request, Product $product): RedirectResponse
     {
         if (strtolower($request->user()->roles) === 'staff') {
             abort(403, 'Unauthorized action.');
         }
-
-        $request->validate([
-            'product_name' => ['required', 'string', 'max:255', 'unique:products,product_name,' . $product->product_id . ',product_id'],
-            'description' => ['nullable', 'string'],
-            'category_id' => ['required', 'exists:categories,category_id'],
-            'unit_price' => ['required', 'numeric', 'min:0'],
-            'lowstock_alert' => ['required', 'integer', 'min:0'],
-            'image' => ['nullable', 'image', 'max:2048'],
-            'remove_image' => ['nullable', 'boolean'],
-        ], [
-            'category_id.required' => 'The category field is required.',
-        ]);
 
         $data = $request->except(['image', 'remove_image']);
 
