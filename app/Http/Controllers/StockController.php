@@ -75,8 +75,8 @@ class StockController extends Controller
                         if (count($parts) === 3) {
                             $year = (int) $parts[0];
                             $currentYear = (int) date('Y');
-                            $maxYear = $currentYear + 100;
-                            
+                            $maxYear = $currentYear + 50;
+
                             if ($year < $currentYear || $year > $maxYear) {
                                 $fail("The expiry date year must be between {$currentYear} and {$maxYear}.");
                             }
@@ -193,8 +193,8 @@ class StockController extends Controller
                         if (count($parts) === 3) {
                             $year = (int) $parts[0];
                             $currentYear = (int) date('Y');
-                            $maxYear = $currentYear + 100;
-                            
+                            $maxYear = $currentYear + 50;
+
                             if ($year < $currentYear || $year > $maxYear) {
                                 $fail("The expiry date year must be between {$currentYear} and {$maxYear}.");
                             }

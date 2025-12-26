@@ -76,7 +76,7 @@
             // Validate year is 4 digits
             if (year.length === 4 && !isNaN(parseInt(year, 10))) {
                 const currentYear = new Date().getFullYear();
-                const maxYear = currentYear + 100;
+                const maxYear = currentYear + 50;
                 const yearInt = parseInt(year, 10);
                 
                 // Validate date is valid
@@ -139,7 +139,7 @@
         
         // Validate year range (current year to current year + 100)
         const currentYear = new Date().getFullYear();
-        const maxYear = currentYear + 100;
+        const maxYear = currentYear + 50;
         if (year < currentYear || year > maxYear) {
             if (errorElement) {
                 errorElement.textContent = `Year must be between ${currentYear} and ${maxYear}`;
