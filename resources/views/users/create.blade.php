@@ -11,8 +11,16 @@
             @csrf
 
             <x-input name="name" label="Full Name" placeholder="Enter full name" required :value="old('name')" />
+            
             <x-input name="email" type="email" label="Email Address" placeholder="Enter email address" required :value="old('email')" />
-            <x-input name="password" type="password" label="Password" placeholder="Enter password" required />
+            <div class="form-group">
+                <label for="password" class="form-label required">Password</label>
+                <input type="password" name="password" id="password" class="form-input" placeholder="Enter password" required>
+                <p style="font-size: 0.8em; color: var(--color-slate-500); margin-top: 0.25rem;">Password must be between 8 and 20 characters.</p>
+                @error('password')
+                    <div class="form-error">{{ $message }}</div>
+                @enderror
+            </div>
             <x-input name="password_confirmation" type="password" label="Confirm Password" placeholder="Confirm password" required />
             
             <x-select name="group_id" label="User Group" required placeholder="Select user group">
@@ -30,4 +38,5 @@
         </form>
     </div>
 </div>
+
 @endsection

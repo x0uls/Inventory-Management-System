@@ -52,8 +52,10 @@ class SupplierController extends Controller
             'category_id' => ['nullable', 'exists:categories,category_id'],
             'contact_person' => ['nullable', 'string', 'max:255'],
             'email' => ['nullable', 'email', 'max:255'],
-            'phone' => ['nullable', 'string', 'max:20'],
+            'phone' => ['nullable', 'string', 'regex:/^\d{10,11}$/'],
             'address' => ['nullable', 'string'],
+        ], [
+            'phone.regex' => 'Phone number must be 10 or 11 digits.',
         ]);
 
         $data = $request->all();
@@ -96,8 +98,10 @@ class SupplierController extends Controller
             'category_id' => ['nullable', 'exists:categories,category_id'],
             'contact_person' => ['nullable', 'string', 'max:255'],
             'email' => ['nullable', 'email', 'max:255'],
-            'phone' => ['nullable', 'string', 'max:20'],
+            'phone' => ['nullable', 'string', 'regex:/^\d{10,11}$/'],
             'address' => ['nullable', 'string'],
+        ], [
+            'phone.regex' => 'Phone number must be 10 or 11 digits.',
         ]);
 
         $supplier->update($request->all());

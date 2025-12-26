@@ -43,7 +43,7 @@
 
             <div class="form-group">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" name="email" id="email" class="form-input" value="{{ old('email') }}">
+                <input type="email" name="email" id="email" class="form-input" placeholder="supplier@example.com" value="{{ old('email') }}">
                 @error('email')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
@@ -51,7 +51,18 @@
 
             <div class="form-group">
                 <label for="phone" class="form-label">Phone</label>
-                <input type="text" name="phone" id="phone" class="form-input" value="{{ old('phone') }}">
+                <input 
+                    type="text" 
+                    name="phone" 
+                    id="phone" 
+                    class="form-input" 
+                    placeholder="Enter 10 or 11 digits" 
+                    pattern="\d{10,11}" 
+                    maxlength="11"
+                    oninput="this.value = this.value.replace(/\D/g, '')"
+                    value="{{ old('phone') }}"
+                >
+                <p style="font-size: 0.8em; color: var(--color-slate-500); margin-top: 0.25rem;">Format: 10 or 11 digits (e.g., 01112345678 or 0191234567)</p>
                 @error('phone')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror

@@ -12,11 +12,13 @@
             @method('PUT')
 
             <x-input name="name" label="Full Name" placeholder="Enter full name" required :value="old('name', $user->name)" />
+            
             <x-input name="email" type="email" label="Email Address" placeholder="Enter email address" required :value="old('email', $user->email)" />
             
             <div class="form-group">
                 <label class="form-label">Password (leave blank to keep current)</label>
                 <input type="password" name="password" class="form-input" placeholder="Enter new password">
+                <p style="font-size: 0.8em; color: var(--color-slate-500); margin-top: 0.25rem;">Password must be between 8 and 20 characters.</p>
             </div>
 
             <div class="form-group">
@@ -39,4 +41,5 @@
         </form>
     </div>
 </div>
+
 @endsection
