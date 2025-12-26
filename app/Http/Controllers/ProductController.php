@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProductController extends Controller
@@ -64,7 +65,7 @@ class ProductController extends Controller
             'category_id.required' => 'The category field is required.',
         ]);
 
-        $data = $request->all();
+        $data = $request->except(['image']);
 
         // Find gaps in IDs
         $ids = Product::orderBy('product_id', 'asc')->pluck('product_id')->toArray();
@@ -116,20 +117,22 @@ class ProductController extends Controller
             'category_id.required' => 'The category field is required.',
         ]);
 
-        $data = $request->all();
+        $data = $request->except(['image', 'remove_image']);
 
         // Handle image removal
         if ($request->has('remove_image') && $request->remove_image) {
-            if ($product->image_path && file_exists(public_path($product->image_path))) {
-                unlink(public_path($product->image_path));
+            if ($product->image_path) {
+                $oldPath = str_replace('storage/', '', $product->image_path);
+                Storage::disk('public')->delete($oldPath);
             }
             $data['image_path'] = null;
         }
 
         if ($request->hasFile('image')) {
             // Delete old image if exists
-            if ($product->image_path && file_exists(public_path($product->image_path))) {
-                unlink(public_path($product->image_path));
+            if ($product->image_path) {
+                $oldPath = str_replace('storage/', '', $product->image_path);
+                Storage::disk('public')->delete($oldPath);
             }
             
             $path = $request->file('image')->store('products', 'public');
@@ -154,10 +157,7 @@ class ProductController extends Controller
                 ->with('error', 'Cannot delete product with existing stock batches.');
         }
 
-        if ($product->image_path && file_exists(public_path($product->image_path))) {
-            unlink(public_path($product->image_path));
-        }
-
+        // Image deletion is handled automatically by the Product model's deleting event
         $product->delete();
 
         return redirect()->route('products.index')

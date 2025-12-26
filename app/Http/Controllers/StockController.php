@@ -65,7 +65,25 @@ class StockController extends Controller
             'batch_number' => ['nullable', 'string'],
             'product_id' => ['required', 'exists:products,product_id'],
             'quantity' => ['required', 'integer', 'min:1'],
-            'expiry_date' => ['nullable', 'date'],
+            'expiry_date' => [
+                'required',
+                'date',
+                'date_format:Y-m-d',
+                function ($attribute, $value, $fail) {
+                    if ($value !== null && $value !== '') {
+                        $parts = explode('-', $value);
+                        if (count($parts) === 3) {
+                            $year = (int) $parts[0];
+                            $currentYear = (int) date('Y');
+                            $maxYear = $currentYear + 100;
+                            
+                            if ($year < $currentYear || $year > $maxYear) {
+                                $fail("The expiry date year must be between {$currentYear} and {$maxYear}.");
+                            }
+                        }
+                    }
+                },
+            ],
         ]);
 
         $batchNumber = $request->batch_number;
@@ -165,7 +183,25 @@ class StockController extends Controller
 
         $request->validate([
             'quantity' => ['required', 'integer', 'min:0'],
-            'expiry_date' => ['nullable', 'date'],
+            'expiry_date' => [
+                'nullable',
+                'date',
+                'date_format:Y-m-d',
+                function ($attribute, $value, $fail) {
+                    if ($value !== null && $value !== '') {
+                        $parts = explode('-', $value);
+                        if (count($parts) === 3) {
+                            $year = (int) $parts[0];
+                            $currentYear = (int) date('Y');
+                            $maxYear = $currentYear + 100;
+                            
+                            if ($year < $currentYear || $year > $maxYear) {
+                                $fail("The expiry date year must be between {$currentYear} and {$maxYear}.");
+                            }
+                        }
+                    }
+                },
+            ],
         ]);
 
         $batch = Batch::findOrFail($id);
